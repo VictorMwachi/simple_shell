@@ -8,7 +8,7 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
-
+int main(int ac __attribute__((unused)), char **av __attribute__((unused)));
 /* functions in split_string.c: */
 int words_in_string(char *str);
 char **split_string(char *str, char *delim);
