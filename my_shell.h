@@ -1,34 +1,68 @@
 #ifndef MY_SHELL_H
 #define MY_SHELL_H
 
+#define _GNU_SOURCE
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
 #include <unistd.h>
-#include <string.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
-int main(int ac __attribute__((unused)), char **av __attribute__((unused)));
-/* functions in split_string.c: */
-int words_in_string(char *str);
-char **split_string(char *str, char *delim);
-void index_function(char *buffer, char **envp);
-int _atoi(char *s);
-int exit_function(char **array_words, char *buffer);
-/* functions in fork_out.c: */
-int _fork(char **arr, char **envp);
-int check_in_path(char **array_words, char *e_path);
-/* functions in functions.c: */
-int _strlen(char *s);
-char *_strcpy(char *dest, char *src);
-int _strncmp(char *s1, char *s2, int n);
+#include <sys/types.h>
+#include <errno.h>
+#include <stdarg.h>
+
+
+extern char **environ;
+/**
+* struct builtin - builtins
+* @b_name: name of the command
+* @b_func: pointer to a function
+*/
+typedef struct builtin
+{
+	char *b_name;
+	int (*b_func)();
+} builtin_struct;
+
+int (*find_builtins(char *user_input))();
+int exit_func(void);
+int env_func(void);
+void change_equal_sig(char *str);
+char *ret_path_line();
+void error_msg(char **args);
+char **get_path(char *args);
+char *_insert_path(char **args, char **path);
+char **getenvpath(void);
+void freedom(int n, ...);
+int non_interactive_mode(char **av);
+int _interactive(char **av __attribute__((unused)));
+int necklace_pearls(char *buffer);
+char **parsing(char *buffer, int characters);
+int execo(char *command, char **args);
+void free_all(char **dptr1, char **dptr2, char *sptr1, char *sptr2);
+void logo(void);
+int strncomparer(char *s1, char *s2, size_t n);
+int strlarge(char *s);
+char *strduplicate(char *s);
+int strcomparer(char *s1, char *s2);
+char *strconk(char *dest, char *src);
+int spaces_buster(char *buffer);
+int lennum(int n);
+char *int_to_charac(int num);
 char *_strcat(char *dest, char *src);
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
-/* functions in more_functions.c: */
-void sig_handler(int sig);
-char *found_path(char **envp);
+char *_strdup(char *s);
+char *_itoa(int num);
+char *_strstr(char *x, char *y);
+int _compare(char *x, char *y);
+int _strlen(char *s);
 int _strcmp(char *s1, char *s2);
-void print_env(char **envp);
-void free_function(char **double_point);
+int _strncmp(char *s1, char *s2, size_t n);
+char *_strcpy(char *dest, char *src);
+
+void error_badcommand(char **args, char *buffer);
+char **args_constructor(char *buffer);
+void validagetline(char *buffer, int len, char **args, char **env_args);
+int notty(char **av __attribute__((unused)));
 
 #endif /* _MY_SHELL */
