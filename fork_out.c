@@ -1,4 +1,4 @@
-#include "my_shell.h"
+#include "main.h"
 
 /**
  * _fork - function to crate parent and child
