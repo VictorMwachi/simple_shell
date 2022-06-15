@@ -1,5 +1,5 @@
-#ifndef MY_SHELL_H
-#define MY_SHELL_H
+#ifndef MAIN_H
+#define MAIN_H
 
 #define _GNU_SOURCE
 #include <string.h>
@@ -65,4 +65,4 @@ char **args_constructor(char *buffer);
 void validagetline(char *buffer, int len, char **args, char **env_args);
 int notty(char **av __attribute__((unused)));
 
-#endif /* _MY_SHELL */
+#endif /* MAIN_H */
