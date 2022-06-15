@@ -1,6 +1,6 @@
 #include "main.h"
 /**
-* freedom - free the memory 
+* freedom - free the memory
 * @n: args
 * Return: null
 */
