@@ -1,4 +1,4 @@
-#include "my_shell.h"
+#include "main.h"
 /**
  * _interactive - Creates a loop that execute command lines entered by tty
  * @av: argument from main
