@@ -1,101 +1,64 @@
 #ifndef SHELL_H
 #define SHELL_H
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <sys/types.h>
-#include <sys/stat.h>
 #include <sys/wait.h>
-#include <fcntl.h>
-#include <signal.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <errno.h>
-#include <limits.h>
-
-extern char **environ;
-
+#include <dirent.h>
+#include <signal.h>
+/*constants*/
+#define EXTERNAL_COMMAND 1
+#define INTERNAL_COMMAND 2
+#define PATH_COMMAND 3
+#define INVALID_COMMAND -1
+#define min(x, y) (((x) < (y)) ? (x) : (y))
 /**
- * struct list_s - singly linked list
- * @str: string - (malloc'ed string)
- * @next: points to the next node
- *
- * Description: singly linked list node structure
+ * struct map - a struct that maps a command name to a function 
+ * @command_name: name of the command
+ * @func: the function that executes the command
  */
-typedef struct list_s
+typedef struct map
 {
-	char *str;
-	struct list_s *next;
-} env_t;
-
-/* main.c */
-int exec(char **input, char *s, int *i, env_t **head);
-
-/* path_finder.c */
-char **get_env(char *name, char **env);
-char *path_finder(char **s, char **env);
-char *get_env_val(char *name, char **env);
-
-/* tokenize.c */
-int wordcount(char *str, char delim);
-char **_strtok(char *str, char delim);
-
-/* print_funcs.c */
-void print_prompt(void);
-int _putchar(char c);
-void _puts(char *str);
-
-/* print_errors.c */
-void print_error(int *i, char *s, char **argv);
-void print_error_env(char **argv);
-void print_error_exit(int *i, char *s, char **argv);
-void print_error_main(char **av);
-void print_error_cd(int *i, char *s, char **argv);
-
-/* string_funcs_1.c */
-int _strcmp(char *s1, char *s2);
-char *str_concat(char *s1, char *s2);
-char *_strstr(char *haystack, char *needle);
-int _strncmp(char *s1, char *s2, unsigned int n);
-char *_strdup(char *str);
-
-/* string_funcs_2.c */
-int _strlen(char *s);
-char *_strcpy(char *dest, char *src);
-
-/* helper_funcs.c */
-void free_everything(char **args);
-void sigint_handler(int sig);
-char **parse_line(char *line, int get);
-
-/* builtins.c */
-int is_builtin(char *line, char **argv, char *prog_name, int *i, env_t **head);
-long int exit_handler(char **tokens);
-int env_handler(char **av, env_t **head);
-int cd_handler(char **argv, env_t **head);
-void change_pwd(char *path, char **env, env_t **head);
-
-/* convert.c */
-char *convert(int num, int base);
-long int _atoi(char *s);
-
-/* list_funcs_1.c */
-env_t *add_node_end(env_t **head, char *str);
-int add_node_at_index(env_t **head, char *str, int index);
-int delete_node_at_index(env_t **head, unsigned int index);
-int find_index_list(env_t *head, char *name);
-
-/* list_funcs_2.c */
-size_t list_len(const env_t *h);
-size_t print_list(env_t *h);
-void free_list(env_t **head);
-int arr_to_list(env_t **head, char **env);
-char **list_to_arr(env_t *head);
-
-/* set_env.c */
-int _unsetenv(env_t **head, char **argv);
-int _setenv(env_t **head, char **argv, int args);
-void setenv_handler(char **argv, env_t **head, int *i, char *prog_name);
-void print_error_setenv(int *i, char *s, char **argv);
-
-#endif
+char *command_name;
+void (*func)(char **command);
+} function_map;
+extern char **environ;
+extern char *line;
+extern char **commands;
+extern char *shell_name;
+extern int status;
+/*helpers*/
+void print(char *, int);
+char **tokenizer(char *, char *);
+void remove_newline(char *);
+int _strlen(char *);
+void _strcpy(char *, char *);
+/*helpers2*/
+int _strcmp(char *, char *);
+char *_strcat(char *, char *);
+int _strspn(char *, char *);
+int _strcspn(char *, char *);
+char *_strchr(char *, char);
+/*helpers3*/
+char *_strtok_r(char *, char *, char **);
+int _atoi(char *);
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
+void ctrl_c_handler(int);
+void remove_comment(char *);
+/*utils*/
+int parse_command(char *);
+void execute_command(char **, int);
+char *check_path(char *);
+void (*get_func(char *))(char **);
+char *_getenv(char *);
+/*built_in*/
+void env(char **);
+void quit(char **);
+/*main*/
+extern void non_interactive(void);
+extern void initializer(char **current_command, int type_command);
+#endif /*SHELL_H for shell project*/
